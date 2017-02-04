@@ -1,0 +1,6 @@
+.vs
+/packages
+.idea
+.vscode/
+/ProductReviews/obj/Debug/
+/ProductReviews/bin/
