@@ -5,6 +5,7 @@ namespace ProductReviews.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
     using Models;
+    using ProductReviews.JGZX.Entities.Common;
     internal sealed class Configuration : DbMigrationsConfiguration<ProductReviews.Models.ApplicationDbContext>
     {
         public Configuration()
@@ -36,6 +37,9 @@ namespace ProductReviews.Migrations
                  new Review { Title = "Review 1", Description = "Test review 1", ProductId = 1 },
                  new Review { Title = "Review 2", Description = "Test review 2", ProductId = 1 }
                  );
+            context.SysConfigBean.AddOrUpdate(f => f.sys_id,
+                new SysConfigBean { filepath = "c:\\temp\\", systype = "act_admin_path" }
+                );
         }
     }
 }

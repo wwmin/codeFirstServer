@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
+using System.Data.Entity;
+using ProductReviews.JGZX.Entities.Common;
 
 namespace ProductReviews.Models
 {
@@ -30,8 +32,13 @@ namespace ProductReviews.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<ProductReviews.Models.Product> Products { get; set; }
+        public DbSet<Product> Products { get; set; }
 
-        public System.Data.Entity.DbSet<ProductReviews.Models.Review> Reviews { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<UpLoadFiles> UpLoadFiles { get; set; }
+        public DbSet<UpLoadHsty> UpLoadHsty { get; set; }
+
+        public DbSet<SysConfigBean> SysConfigBean { get; set; }
     }
 }

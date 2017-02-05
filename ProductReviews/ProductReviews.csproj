@@ -210,12 +210,22 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
     <Compile Include="Controllers\ReviewsController.cs" />
+    <Compile Include="Controllers\UpLoadFilesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="JGZX\Entities\Common\SysConfigBean.cs" />
     <Compile Include="Migrations\201702031510253_Initial.cs" />
     <Compile Include="Migrations\201702031510253_Initial.Designer.cs">
       <DependentUpon>201702031510253_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702040723554_Update-NewType-Name.cs" />
+    <Compile Include="Migrations\201702040723554_Update-NewType-Name.Designer.cs">
+      <DependentUpon>201702040723554_Update-NewType-Name.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201702040818510_Update-SysConfigBean.cs" />
+    <Compile Include="Migrations\201702040818510_Update-SysConfigBean.Designer.cs">
+      <DependentUpon>201702040818510_Update-SysConfigBean.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountBindingModels.cs" />
@@ -224,6 +234,7 @@
     <Compile Include="Models\Product.cs" />
     <Compile Include="Models\ProductDetailsDTO.cs" />
     <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\UpLoadFiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
@@ -286,6 +297,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="JGZX\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -301,6 +313,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201702031510253_Initial.resx">
       <DependentUpon>201702031510253_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702040723554_Update-NewType-Name.resx">
+      <DependentUpon>201702040723554_Update-NewType-Name.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201702040818510_Update-SysConfigBean.resx">
+      <DependentUpon>201702040818510_Update-SysConfigBean.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

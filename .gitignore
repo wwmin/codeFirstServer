@@ -4,3 +4,5 @@
 .vscode/
 /ProductReviews/obj/Debug/
 /ProductReviews/bin/
+ProductReviews/Migrations/
+!ProductReviews/Migrations/Configuration.cs
