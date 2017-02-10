@@ -40,5 +40,7 @@ namespace ProductReviews.Models
         public DbSet<UpLoadHsty> UpLoadHsty { get; set; }
 
         public DbSet<SysConfigBean> SysConfigBean { get; set; }
+
+        public DbSet<UpLoadFilesBigSmall> UpLoadFilesBigSmall { get; set; }
     }
 }

@@ -21,8 +21,8 @@ namespace ProductReviews.Controllers
 
 
         [AllowAnonymous]
-        [Route("api/uploadfiles"),HttpPost]
-        public HttpResponseMessage Post(HttpRequestMessage request)
+        [Route("api/uploadfiles"), HttpPost]
+        public HttpResponseMessage filesUpload(HttpRequestMessage request)
         {
             HttpResponseMessage response = null;
             List<string> filelist = new List<string>();
@@ -69,7 +69,111 @@ namespace ProductReviews.Controllers
         }
 
 
+        [AllowAnonymous]
+        [Route("api/uploadFilesWithSmallImg"), HttpPost]
+        public HttpResponseMessage filesUploadBigSmallImg(HttpRequestMessage request)
+        {
+            HttpResponseMessage response = null;
+            List<string> filelist = new List<string>();
+            try
+            {
+                List<UpLoadFilesBigSmall> UpLoadFilesBigSmallList = new List<UpLoadFilesBigSmall>();
+                int cnt = System.Web.HttpContext.Current.Request.Files.Count;
+                for (int i = 0; i < cnt; i++)
+                {
+                    UpLoadFilesBigSmall UpLoadFilesBigSmall = new UpLoadFilesBigSmall();
+                    HttpPostedFile mFile = System.Web.HttpContext.Current.Request.Files[i];
+                    if (mFile == null || mFile.ContentLength == 0) { response = request.CreateResponse(HttpStatusCode.OK, new { }); continue; }
+                    #region 获取文件信息
+                    Stream fs = mFile.InputStream;
+                    byte[] myFile = new byte[fs.Length];
+                    fs.Read(myFile, 0, (int)fs.Length);
 
+                    string[] mFileExtNameArray = mFile.FileName.Split('.');
+                    string mFileExtName = mFileExtNameArray[mFileExtNameArray.Length-1];
+                    string mCurrentFileName = mFile.FileName;//上传时文件名称
+                    string mSysFileName = System.Guid.NewGuid().ToString().ToUpper().Replace("-", "");//生成guid全大写去掉  "-"  后的文件名，没有扩展名
+                    string mSysFileFullName = mSysFileName + '.' + mFileExtName;//生成系统的文件名称 
+                    #endregion
+                    #region 生成文件名称以及建立文件夹
+                    string mRootSaveFolder = "/upload";
+                    //按时间进行分组
+                    string mDateFolder = DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString();
+                    //文件扩展名
+                    string mFileExtentName = mFileExtNameArray[mFileExtNameArray.Length - 1];
+                    //大图存放的图片路径
+                    string mBigFileFolder = "/big/" + mDateFolder + "/";
+                    //网站路径地址
+                    string url = System.Web.HttpContext.Current.Request.Url.Host + ":" + System.Web.HttpContext.Current.Request.Url.Port+mRootSaveFolder;
+                    //网站本地路径
+                    string savePath = System.Web.HttpContext.Current.Server.MapPath(mRootSaveFolder);
+                    //大图片存放的文件夹路径
+                    string mSaveBigFileFolder = savePath + mBigFileFolder;
+                    //创建文件夹
+                    if (!Directory.Exists(mSaveBigFileFolder))
+                    {
+                        Directory.CreateDirectory(mSaveBigFileFolder);
+                    }
+                    #endregion
+                    #region 保存文件,如果为图片类数据,则生成缩略图
+
+                    List<string> mExtNameArray = new List<string>();//图片类型数组
+                    mExtNameArray.Add("jpg");
+                    mExtNameArray.Add("png");
+                    mExtNameArray.Add("bmp");
+                    mExtNameArray.Add("jpeg");
+                    mExtNameArray.Add("gif");
+                    //是否为图片
+                    var mIsPic = mExtNameArray.Where(p => p == mFileExtentName.ToLower()).FirstOrDefault() == null ? false : true;
+                    var mFileUrl = mSaveBigFileFolder + mSysFileFullName;
+                    if (mIsPic)
+                    {
+                        var mSmallImage = ImageHelper.GetThumbnail(ImageHelper.BytesToImage(myFile),200,150);
+                        //小图片存放的图片路径
+                        string mSmallFileFolder = "/samll/" + mDateFolder + "/";
+                        //小图片存放的文件夹路径
+                        string mSaveSmallFileFolder = savePath + mSmallFileFolder;
+                        if (!Directory.Exists(mSaveSmallFileFolder))
+                        {
+                            Directory.CreateDirectory(mSaveSmallFileFolder);
+                        }
+                        mSmallImage.Save(mSaveSmallFileFolder + mSysFileFullName);
+
+                        //写入实例
+                        UpLoadFilesBigSmall.F_FileSmallURL = mSmallFileFolder + mSysFileFullName;
+                    }
+                    else
+                    {
+                        UpLoadFilesBigSmall.F_FileSmallURL = "";
+                    }
+                    mFile.SaveAs(mFileUrl);
+                    #endregion
+                    #region 添加数据到数据库
+                    UpLoadFilesBigSmall.F_FileCurrentName = mCurrentFileName;
+                    UpLoadFilesBigSmall.F_FileExtName = mFileExtentName;
+                    UpLoadFilesBigSmall.F_FileSysName = mSysFileName;
+                    UpLoadFilesBigSmall.F_FileURL = mBigFileFolder + mSysFileFullName;
+
+                    UpLoadFilesBigSmallList.Add(UpLoadFilesBigSmall);
+                    #endregion
+                    db.UpLoadFilesBigSmall.Add(UpLoadFilesBigSmall);
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception ex)
+                    {
+                        return request.CreateErrorResponse(HttpStatusCode.NotImplemented,ex.Message);
+                    }
+                }
+                response = request.CreateResponse(HttpStatusCode.OK, UpLoadFilesBigSmallList.ToList());
+            }
+            catch (Exception ex)
+            {
+                return request.CreateErrorResponse(HttpStatusCode.NotImplemented, ex.Message);
+            }
+            return response;
+        }
         // GET: api/UpLoadFiles
         //public IQueryable<UpLoadFiles> GetUpLoadFiles()
         //{

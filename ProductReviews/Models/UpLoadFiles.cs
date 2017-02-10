@@ -27,4 +27,17 @@ namespace ProductReviews.Models
         public string new_name { get; set; }
         public DateTime create_date { get; set; }
     }
+    
+    public class UpLoadFilesBigSmall
+    {
+        [Key]
+        public int F_Id { get; set; }
+        public string F_FileURL { get; set; }
+        public string F_FileSysName { get; set; }
+        public string F_FileCurrentName { get; set; }
+        public string F_FileExtName { get; set; }
+        public string F_FileSmallURL { get; set; }
+        public int? F_sortCode{ get; set; }
+
+    }
 }
